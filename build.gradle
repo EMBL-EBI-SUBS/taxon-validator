@@ -1,0 +1,34 @@
+group 'uk.ac.ebi.subs'
+version '1.0.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+}
+
+sourceCompatibility = 1.8
+
+dependencies {
+    compile ("com.github.EMBL-EBI-SUBS:validator-common:SUBS-477-SNAPSHOT")
+
+    compile("org.springframework.boot:spring-boot-starter")
+    compile("org.springframework:spring-web")
+    compile("com.fasterxml.jackson.core:jackson-databind")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}
