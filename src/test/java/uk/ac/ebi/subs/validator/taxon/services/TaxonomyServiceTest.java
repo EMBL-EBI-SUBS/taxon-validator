@@ -21,7 +21,7 @@ public class TaxonomyServiceTest {
 
     @Test
     public void getTaxonbyIdTest() {
-        Taxonomy taxonomy = taxonomyService.getTaxonById("967000006");
+        Taxonomy taxonomy = taxonomyService.getTaxonById("9606");
         Assert.assertEquals(HUMAN_TAXON, taxonomy.toString());
     }
 
