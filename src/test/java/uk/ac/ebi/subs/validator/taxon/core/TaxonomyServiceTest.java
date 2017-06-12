@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class TaxonomyServiceTest {
 
-    private final String HUMAN_TAXON = "Taxonomy{taxId='9606', scientificName='Homo sapiens', commonName='human', formalName=true}";
+    private final String HUMAN_TAXON = "Taxonomy{id='9606', scientificName='Homo sapiens', commonName='human', formalName=true}";
 
     @Autowired
     TaxonomyService taxonomyService;

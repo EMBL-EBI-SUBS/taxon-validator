@@ -2,24 +2,37 @@ package uk.ac.ebi.subs.validator.taxon;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
+import uk.ac.ebi.subs.validator.taxon.core.Taxonomy;
+import uk.ac.ebi.subs.validator.taxon.core.TaxonomyService;
 
-@SpringBootTest
-@RunWith(SpringJUnit4ClassRunner.class)
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class ValidatorTest {
 
     private final String SUCCESS_MESSAGE = "Valid taxonomy";
     private final String FAILURE_MESSAGE = "Invalid taxonomy";
 
-    @Autowired
-    Validator validator;
+    private Validator validator;
+    private Taxonomy taxonomy;
+
+    public ValidatorTest() {
+        validator = new Validator();
+
+        TaxonomyService taxonomyService = mock(TaxonomyService.class);
+        validator.taxonomyService = taxonomyService;
+
+        taxonomy = createTaxonomy("9606", "Homo sapiens", "human", true);
+
+        when(taxonomyService.getTaxonById(taxonomy.getId())).thenReturn(taxonomy);
+        when(taxonomyService.getTaxonById("9600000006")).thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
+    }
 
     @Test
     public void validateTaxonIdSuccessTest() {
-        String message = validator.validateTaxonId("9606");
+        String message = validator.validateTaxonId(taxonomy.getId());
         Assert.assertTrue(message.startsWith(SUCCESS_MESSAGE));
     }
 
@@ -39,5 +52,14 @@ public class ValidatorTest {
     public void validateNullTaxonTest() {
         String message = validator.validateTaxonId(null);
         Assert.assertTrue(message.startsWith(FAILURE_MESSAGE));
+    }
+
+    private Taxonomy createTaxonomy(String id, String scientificName, String commonName, boolean formalName) {
+        Taxonomy taxon = new Taxonomy();
+        taxon.setId(id);
+        taxon.setScientificName(scientificName);
+        taxon.setCommonName(commonName);
+        taxon.setFormalName(formalName);
+        return taxon;
     }
 }

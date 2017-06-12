@@ -5,17 +5,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Taxonomy {
 
-    String taxId;
-    String scientificName;
-    String commonName;
-    boolean formalName;
+    private String id;
+    private String scientificName;
+    private String commonName;
+    private boolean formalName;
 
-    public String getTaxId() {
-        return taxId;
+    public String getId() {
+        return id;
     }
 
-    public void setTaxId(String taxId) {
-        this.taxId = taxId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getScientificName() {
@@ -45,7 +45,7 @@ public class Taxonomy {
     @Override
     public String toString() {
         return "Taxonomy{" +
-                "taxId='" + taxId + '\'' +
+                "id='" + id + '\'' +
                 ", scientificName='" + scientificName + '\'' +
                 ", commonName='" + commonName + '\'' +
                 ", formalName=" + formalName +

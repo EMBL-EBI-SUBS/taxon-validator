@@ -22,6 +22,7 @@ public class Validator {
 
     public String validateTaxonId(String id) {
         if (id == null || id.isEmpty()) {
+            logger.error("Taxonomy can't be empty or null.");
             return FAILURE_MESSAGE + " empty id";
         }
         try {
