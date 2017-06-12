@@ -6,25 +6,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import uk.ac.ebi.subs.validator.taxon.core.Taxonomy;
 import uk.ac.ebi.subs.validator.taxon.core.TaxonomyService;
-import uk.ac.ebi.subs.validator.taxon.core.Validator;
+import uk.ac.ebi.subs.validator.taxon.core.TaxonomyValidator;
 import uk.ac.ebi.subs.validator.taxon.utils.TestUtils;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ValidatorTest {
+public class TaxonomyValidatorTest {
 
     private final String SUCCESS_MESSAGE = "Valid taxonomy";
     private final String FAILURE_MESSAGE = "Invalid taxonomy";
 
-    private Validator validator;
+    private TaxonomyValidator taxonomyValidator;
     private Taxonomy taxonomy;
 
-    public ValidatorTest() {
-        validator = new Validator();
+    public TaxonomyValidatorTest() {
+        taxonomyValidator = new TaxonomyValidator();
 
         TaxonomyService taxonomyService = mock(TaxonomyService.class);
-        validator.taxonomyService = taxonomyService;
+        taxonomyValidator.taxonomyService = taxonomyService;
 
         taxonomy = TestUtils.createTaxonomy("9606", "Homo sapiens", "human", true);
 
@@ -34,25 +34,25 @@ public class ValidatorTest {
 
     @Test
     public void validateTaxonIdSuccessTest() {
-        String message = validator.validateTaxonId(taxonomy.getId());
+        String message = taxonomyValidator.validateTaxonId(taxonomy.getId());
         Assert.assertTrue(message.startsWith(SUCCESS_MESSAGE));
     }
 
     @Test
     public void validateTaxonFailureTest() {
-        String message = validator.validateTaxonId("9600000006");
+        String message = taxonomyValidator.validateTaxonId("9600000006");
         Assert.assertTrue(message.startsWith(FAILURE_MESSAGE));
     }
 
     @Test
     public void validateEmptyTaxonTest() {
-        String message = validator.validateTaxonId("");
+        String message = taxonomyValidator.validateTaxonId("");
         Assert.assertTrue(message.startsWith(FAILURE_MESSAGE));
     }
 
     @Test
     public void validateNullTaxonTest() {
-        String message = validator.validateTaxonId(null);
+        String message = taxonomyValidator.validateTaxonId(null);
         Assert.assertTrue(message.startsWith(FAILURE_MESSAGE));
     }
 

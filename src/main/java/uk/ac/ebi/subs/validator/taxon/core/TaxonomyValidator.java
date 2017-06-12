@@ -8,8 +8,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 
 @Service
-public class Validator {
-    public static final Logger logger = LoggerFactory.getLogger(Validator.class);
+public class TaxonomyValidator {
+    public static final Logger logger = LoggerFactory.getLogger(TaxonomyValidator.class);
 
     private final String SUCCESS_MESSAGE = "Valid taxonomy";
     private final String FAILURE_MESSAGE = "Invalid taxonomy";
