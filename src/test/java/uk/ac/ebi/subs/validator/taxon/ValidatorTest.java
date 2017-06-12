@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import uk.ac.ebi.subs.validator.taxon.core.Taxonomy;
 import uk.ac.ebi.subs.validator.taxon.core.TaxonomyService;
+import uk.ac.ebi.subs.validator.taxon.core.Validator;
+import uk.ac.ebi.subs.validator.taxon.utils.TestUtils;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -24,7 +26,7 @@ public class ValidatorTest {
         TaxonomyService taxonomyService = mock(TaxonomyService.class);
         validator.taxonomyService = taxonomyService;
 
-        taxonomy = createTaxonomy("9606", "Homo sapiens", "human", true);
+        taxonomy = TestUtils.createTaxonomy("9606", "Homo sapiens", "human", true);
 
         when(taxonomyService.getTaxonById(taxonomy.getId())).thenReturn(taxonomy);
         when(taxonomyService.getTaxonById("9600000006")).thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
@@ -54,12 +56,4 @@ public class ValidatorTest {
         Assert.assertTrue(message.startsWith(FAILURE_MESSAGE));
     }
 
-    private Taxonomy createTaxonomy(String id, String scientificName, String commonName, boolean formalName) {
-        Taxonomy taxon = new Taxonomy();
-        taxon.setId(id);
-        taxon.setScientificName(scientificName);
-        taxon.setCommonName(commonName);
-        taxon.setFormalName(formalName);
-        return taxon;
-    }
 }

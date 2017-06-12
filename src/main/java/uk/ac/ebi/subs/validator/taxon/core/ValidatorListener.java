@@ -1,4 +1,4 @@
-package uk.ac.ebi.subs.validator.taxon;
+package uk.ac.ebi.subs.validator.taxon.core;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitMessagingTemplate;

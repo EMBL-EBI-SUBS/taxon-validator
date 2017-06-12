@@ -1,4 +1,4 @@
-package uk.ac.ebi.subs.validator.taxon;
+package uk.ac.ebi.subs.validator.taxon.core;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
-import uk.ac.ebi.subs.validator.taxon.core.Taxonomy;
-import uk.ac.ebi.subs.validator.taxon.core.TaxonomyService;
 
 @Service
 public class Validator {
