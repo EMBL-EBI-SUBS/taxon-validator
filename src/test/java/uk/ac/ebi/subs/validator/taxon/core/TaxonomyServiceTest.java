@@ -1,4 +1,4 @@
-package uk.ac.ebi.subs.validator.taxon.services;
+package uk.ac.ebi.subs.validator.taxon.core;
 
 
 import org.junit.Assert;
@@ -7,8 +7,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.ac.ebi.subs.validator.taxon.core.Taxonomy;
-import uk.ac.ebi.subs.validator.taxon.core.TaxonomyService;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)

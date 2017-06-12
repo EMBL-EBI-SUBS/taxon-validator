@@ -25,7 +25,9 @@ repositories {
 sourceCompatibility = 1.8
 
 dependencies {
-    compile ("com.github.EMBL-EBI-SUBS:validator-common:SUBS-477-SNAPSHOT")
+    compile ("com.github.EMBL-EBI-SUBS:validator-common:master-SNAPSHOT") {
+        changing = true
+    }
 
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework:spring-web")
