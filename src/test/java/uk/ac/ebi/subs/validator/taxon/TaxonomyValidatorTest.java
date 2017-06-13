@@ -4,10 +4,13 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
+import uk.ac.ebi.subs.data.submittable.Sample;
+import uk.ac.ebi.subs.validator.data.SingleValidationResult;
 import uk.ac.ebi.subs.validator.taxon.core.Taxonomy;
 import uk.ac.ebi.subs.validator.taxon.core.TaxonomyService;
 import uk.ac.ebi.subs.validator.taxon.core.TaxonomyValidator;
-import uk.ac.ebi.subs.validator.taxon.utils.TestUtils;
+
+import java.util.UUID;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -15,10 +18,11 @@ import static org.mockito.Mockito.when;
 public class TaxonomyValidatorTest {
 
     private final String SUCCESS_MESSAGE = "Valid taxonomy";
-    private final String FAILURE_MESSAGE = "Invalid taxonomy";
+    private final String FAILURE_MESSAGE = "Invalid taxonomy: ";
 
     private TaxonomyValidator taxonomyValidator;
     private Taxonomy taxonomy;
+    private Sample sample;
 
     public TaxonomyValidatorTest() {
         taxonomyValidator = new TaxonomyValidator();
@@ -26,34 +30,43 @@ public class TaxonomyValidatorTest {
         TaxonomyService taxonomyService = mock(TaxonomyService.class);
         taxonomyValidator.taxonomyService = taxonomyService;
 
-        taxonomy = TestUtils.createTaxonomy("9606", "Homo sapiens", "human", true);
+        taxonomy = TestUtils.createTaxonomy("9606", "Homo sapiens", "human", true, true);
+
+        sample = new Sample();
+        sample.setId(UUID.randomUUID().toString());
 
         when(taxonomyService.getTaxonById(taxonomy.getId())).thenReturn(taxonomy);
-        when(taxonomyService.getTaxonById("9600000006")).thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
+        when(taxonomyService.getTaxonById(String.valueOf(96000006L))).thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
+        when(taxonomyService.getTaxonByTaxonomicName("human")).thenReturn(taxonomy);
     }
 
     @Test
     public void validateTaxonIdSuccessTest() {
-        String message = taxonomyValidator.validateTaxonId(taxonomy.getId());
-        Assert.assertTrue(message.startsWith(SUCCESS_MESSAGE));
+        sample.setTaxonId(Long.valueOf(taxonomy.getId()));
+
+        SingleValidationResult result = taxonomyValidator.validateTaxonomy(sample);
+        Assert.assertTrue(result.getMessage().startsWith(SUCCESS_MESSAGE));
     }
 
     @Test
     public void validateTaxonFailureTest() {
-        String message = taxonomyValidator.validateTaxonId("9600000006");
-        Assert.assertTrue(message.startsWith(FAILURE_MESSAGE));
-    }
+        sample.setTaxonId(96000006L);
 
-    @Test
-    public void validateEmptyTaxonTest() {
-        String message = taxonomyValidator.validateTaxonId("");
-        Assert.assertTrue(message.startsWith(FAILURE_MESSAGE));
+        SingleValidationResult result = taxonomyValidator.validateTaxonomy(sample);
+        Assert.assertTrue(result.getMessage().startsWith(FAILURE_MESSAGE));
     }
 
     @Test
     public void validateNullTaxonTest() {
-        String message = taxonomyValidator.validateTaxonId(null);
-        Assert.assertTrue(message.startsWith(FAILURE_MESSAGE));
+        SingleValidationResult result = taxonomyValidator.validateTaxonomy(sample);
+        Assert.assertTrue(result.getMessage().startsWith(FAILURE_MESSAGE));
     }
 
+    @Test
+    public void validateByTaxonomicName() {
+        sample.setTaxon("human");
+
+        SingleValidationResult result = taxonomyValidator.validateTaxonomy(sample);
+        Assert.assertTrue(result.getMessage().startsWith(SUCCESS_MESSAGE));
+    }
 }
