@@ -9,6 +9,7 @@ public class Taxonomy {
     private String scientificName;
     private String commonName;
     private boolean formalName;
+    private boolean submittable;
 
     public String getId() {
         return id;
@@ -42,6 +43,14 @@ public class Taxonomy {
         this.formalName = formalName;
     }
 
+    public boolean isSubmittable() {
+        return submittable;
+    }
+
+    public void setSubmittable(boolean submittable) {
+        this.submittable = submittable;
+    }
+
     @Override
     public String toString() {
         return "Taxonomy{" +
@@ -49,6 +58,7 @@ public class Taxonomy {
                 ", scientificName='" + scientificName + '\'' +
                 ", commonName='" + commonName + '\'' +
                 ", formalName=" + formalName +
+                ", submittable=" + submittable +
                 '}';
     }
 }
