@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class ConsumerConfiguration implements ApplicationListener<ApplicationReadyEvent> {
 
     @Autowired
-    RabbitAdmin admin;
+    private RabbitAdmin admin;
 
     @Bean
     public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
