@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
-import uk.ac.ebi.subs.data.component.Archive;
 import uk.ac.ebi.subs.data.submittable.Sample;
 import uk.ac.ebi.subs.validator.data.SingleValidationResult;
+import uk.ac.ebi.subs.validator.data.ValidationAuthor;
 import uk.ac.ebi.subs.validator.data.ValidationStatus;
 
 import java.util.UUID;
@@ -86,7 +86,7 @@ public class TaxonomyValidator {
         result.setUuid(UUID.randomUUID().toString());
         result.setEntityUuid(sample.getId());
         result.setMessage(message);
-        result.setArchive(Archive.Usi); //FIXME - Replace field archive with validation identification
+        result.setValidationAuthor(ValidationAuthor.Taxonomy);
         result.setValidationStatus(status);
         return result;
     }
