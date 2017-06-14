@@ -10,7 +10,7 @@ public class TaxonomyService {
     private final String ENA_TAXONOMY_SERVICE = "http://www.ebi.ac.uk/ena/data/taxonomy/v1/taxon/";
 
     @Autowired
-    RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     public Taxonomy getTaxonById(String id) {
         return restTemplate.getForObject(ENA_TAXONOMY_SERVICE + "tax-id/" + id, Taxonomy.class);
