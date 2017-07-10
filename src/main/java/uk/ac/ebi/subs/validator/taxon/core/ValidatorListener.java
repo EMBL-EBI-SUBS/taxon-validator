@@ -8,12 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.stereotype.Service;
 import uk.ac.ebi.subs.data.submittable.Sample;
-import uk.ac.ebi.subs.validator.data.SingleValidationResult;
-import uk.ac.ebi.subs.validator.data.ValidationMessageEnvelope;
-import uk.ac.ebi.subs.validator.data.ValidationStatus;
+import uk.ac.ebi.subs.validator.data.*;
 import uk.ac.ebi.subs.validator.messaging.Exchanges;
 import uk.ac.ebi.subs.validator.messaging.Queues;
 import uk.ac.ebi.subs.validator.messaging.RoutingKeys;
+
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class ValidatorListener {
@@ -35,22 +36,45 @@ public class ValidatorListener {
         logger.debug("Got sample to validate taxonomy.");
 
         Sample sample = (Sample) envelope.getEntityToValidate();
-        SingleValidationResult result = validator.validateTaxonomy(sample);
+        SingleValidationResult singleValidationResult = validator.validateTaxonomy(sample);
 
         logger.debug("Taxonomy validation done.");
         
-        result.setValidationResultUUID(envelope.getValidationResultUUID());
+        singleValidationResult.setValidationResultUUID(envelope.getValidationResultUUID());
 
-        sendResults(result);
+        List<SingleValidationResult> validationResults = Collections.singletonList(singleValidationResult);
+
+        sendResults(
+            buildSingleValidationResultsEnvelope(validationResults, envelope.getValidationResultVersion(), envelope.getValidationResultUUID()),
+            hasValidationError(validationResults)
+        );
     }
 
-    private void sendResults(SingleValidationResult singleValidationResult) {
-        if (singleValidationResult.getValidationStatus().equals(ValidationStatus.Error)) {
-            rabbitMessagingTemplate.convertAndSend(Exchanges.VALIDATION, RoutingKeys.EVENT_VALIDATION_ERROR, singleValidationResult);
+    private void sendResults(SingleValidationResultsEnvelope singleValidationResultsEnvelope, boolean hasValidationError) {
+        if (hasValidationError) {
+            rabbitMessagingTemplate.convertAndSend(
+                    Exchanges.VALIDATION, RoutingKeys.EVENT_VALIDATION_ERROR, singleValidationResultsEnvelope);
         } else {
-            rabbitMessagingTemplate.convertAndSend(Exchanges.VALIDATION, RoutingKeys.EVENT_VALIDATION_SUCCESS, singleValidationResult);
+            rabbitMessagingTemplate.convertAndSend(
+                    Exchanges.VALIDATION, RoutingKeys.EVENT_VALIDATION_SUCCESS, singleValidationResultsEnvelope);
 
         }
     }
 
+    private SingleValidationResultsEnvelope buildSingleValidationResultsEnvelope(
+            List<SingleValidationResult> validationResults, int validationResultVersion, String validationResultUUID) {
+
+        return new SingleValidationResultsEnvelope(
+                validationResults, validationResultVersion, validationResultUUID, ValidationAuthor.Taxonomy
+        );
+    }
+
+    boolean hasValidationError(List<SingleValidationResult> validationResults) {
+        SingleValidationResult errorValidationResult = validationResults.stream().filter(
+                validationResult -> validationResult.getValidationStatus() == ValidationStatus.Error)
+                .findAny()
+                .orElse(null);
+
+        return errorValidationResult != null;
+    }
 }

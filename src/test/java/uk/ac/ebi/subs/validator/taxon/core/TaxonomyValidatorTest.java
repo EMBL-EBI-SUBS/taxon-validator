@@ -1,4 +1,4 @@
-package uk.ac.ebi.subs.validator.taxon;
+package uk.ac.ebi.subs.validator.taxon.core;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -6,9 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import uk.ac.ebi.subs.data.submittable.Sample;
 import uk.ac.ebi.subs.validator.data.SingleValidationResult;
-import uk.ac.ebi.subs.validator.taxon.core.Taxonomy;
-import uk.ac.ebi.subs.validator.taxon.core.TaxonomyService;
-import uk.ac.ebi.subs.validator.taxon.core.TaxonomyValidator;
 
 import java.util.UUID;
 
