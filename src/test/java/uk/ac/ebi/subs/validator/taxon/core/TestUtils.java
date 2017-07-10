@@ -1,6 +1,4 @@
-package uk.ac.ebi.subs.validator.taxon;
-
-import uk.ac.ebi.subs.validator.taxon.core.Taxonomy;
+package uk.ac.ebi.subs.validator.taxon.core;
 
 public class TestUtils {
 

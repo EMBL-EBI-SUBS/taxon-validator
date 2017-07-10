@@ -25,7 +25,7 @@ repositories {
 sourceCompatibility = 1.8
 
 dependencies {
-    compile ("uk.ac.ebi.subs:validator-common:1.6.0-SNAPSHOT") {
+    compile ("uk.ac.ebi.subs:validator-common:1.11.0-SNAPSHOT") {
         changing = true
         exclude group: 'org.springframework.boot', module :'spring-boot-starter-data-mongodb'
     }
