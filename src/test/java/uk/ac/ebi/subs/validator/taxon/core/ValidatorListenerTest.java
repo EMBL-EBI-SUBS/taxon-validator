@@ -28,7 +28,7 @@ public class ValidatorListenerTest {
         validationResults.add(generateSingleValidationResult(ValidationStatus.Error));
 
         ValidatorListener listener =
-                new ValidatorListener(mock(RabbitMessagingTemplate.class), mock(MessageConverter.class));
+                new ValidatorListener(mock(RabbitMessagingTemplate.class));
 
         assertThat(listener.hasValidationError(validationResults), is(equalTo(true)));
     }
