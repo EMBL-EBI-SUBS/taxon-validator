@@ -31,7 +31,7 @@ public class ValidatorListener {
 
     @RabbitListener(queues = Queues.TAXON_SAMPLE_VALIDATION)
     public void handleValidationRequest(ValidationMessageEnvelope<Sample> envelope) {
-        logger.debug("Got sample to validate taxonomy.");
+        logger.debug("Got sample to validate taxonomy with ID: {}.", envelope.getEntityToValidate().getId());
 
         Sample sample = (Sample) envelope.getEntityToValidate();
         SingleValidationResult singleValidationResult = validator.validateTaxonomy(sample);
