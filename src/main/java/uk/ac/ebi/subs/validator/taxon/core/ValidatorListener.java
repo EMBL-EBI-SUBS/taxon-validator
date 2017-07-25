@@ -31,16 +31,16 @@ public class ValidatorListener {
 
     @RabbitListener(queues = Queues.TAXON_SAMPLE_VALIDATION)
     public void handleValidationRequest(ValidationMessageEnvelope<Sample> envelope) {
-        logger.debug("Got sample to validate taxonomy with ID: {}.", envelope.getEntityToValidate().getId());
+        logger.info("Got sample to validate with ID: {}.", envelope.getEntityToValidate().getId());
 
-        Sample sample = (Sample) envelope.getEntityToValidate();
+        Sample sample = envelope.getEntityToValidate();
         SingleValidationResult singleValidationResult = validator.validateTaxonomy(sample);
 
-        logger.debug("Taxonomy validation done.");
-        
         singleValidationResult.setValidationResultUUID(envelope.getValidationResultUUID());
 
         List<SingleValidationResult> validationResults = Collections.singletonList(singleValidationResult);
+
+        logger.info("Taxonomy validation done.");
 
         sendResults(
             buildSingleValidationResultsEnvelope(validationResults, envelope.getValidationResultVersion(), envelope.getValidationResultUUID()),
@@ -50,12 +50,9 @@ public class ValidatorListener {
 
     private void sendResults(SingleValidationResultsEnvelope singleValidationResultsEnvelope, boolean hasValidationError) {
         if (hasValidationError) {
-            rabbitMessagingTemplate.convertAndSend(
-                    Exchanges.VALIDATION, RoutingKeys.EVENT_VALIDATION_ERROR, singleValidationResultsEnvelope);
+            rabbitMessagingTemplate.convertAndSend(Exchanges.VALIDATION, RoutingKeys.EVENT_VALIDATION_ERROR, singleValidationResultsEnvelope);
         } else {
-            rabbitMessagingTemplate.convertAndSend(
-                    Exchanges.VALIDATION, RoutingKeys.EVENT_VALIDATION_SUCCESS, singleValidationResultsEnvelope);
-
+            rabbitMessagingTemplate.convertAndSend(Exchanges.VALIDATION, RoutingKeys.EVENT_VALIDATION_SUCCESS, singleValidationResultsEnvelope);
         }
     }
 

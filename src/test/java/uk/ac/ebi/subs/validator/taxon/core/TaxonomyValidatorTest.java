@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import uk.ac.ebi.subs.data.submittable.Sample;
 import uk.ac.ebi.subs.validator.data.SingleValidationResult;
+import uk.ac.ebi.subs.validator.data.ValidationStatus;
 
 import java.util.UUID;
 
@@ -32,17 +33,17 @@ public class TaxonomyValidatorTest {
         sample = new Sample();
         sample.setId(UUID.randomUUID().toString());
 
-        when(taxonomyService.getTaxonById(taxonomy.getId())).thenReturn(taxonomy);
+        when(taxonomyService.getTaxonById(taxonomy.getTaxId())).thenReturn(taxonomy);
         when(taxonomyService.getTaxonById(String.valueOf(96000006L))).thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
         when(taxonomyService.getTaxonByTaxonomicName("human")).thenReturn(taxonomy);
     }
 
     @Test
     public void validateTaxonIdSuccessTest() {
-        sample.setTaxonId(Long.valueOf(taxonomy.getId()));
+        sample.setTaxonId(Long.valueOf(taxonomy.getTaxId()));
 
         SingleValidationResult result = taxonomyValidator.validateTaxonomy(sample);
-        Assert.assertTrue(result.getMessage().startsWith(SUCCESS_MESSAGE));
+        Assert.assertTrue(result.getValidationStatus().equals(ValidationStatus.Pass));
     }
 
     @Test
@@ -64,6 +65,6 @@ public class TaxonomyValidatorTest {
         sample.setTaxon("human");
 
         SingleValidationResult result = taxonomyValidator.validateTaxonomy(sample);
-        Assert.assertTrue(result.getMessage().startsWith(SUCCESS_MESSAGE));
+        Assert.assertTrue(result.getValidationStatus().equals(ValidationStatus.Error));
     }
 }
