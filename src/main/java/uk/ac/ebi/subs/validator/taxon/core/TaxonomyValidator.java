@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.ResourceAccessException;
 import uk.ac.ebi.subs.data.submittable.Sample;
 import uk.ac.ebi.subs.validator.data.SingleValidationResult;
 import uk.ac.ebi.subs.validator.data.ValidationAuthor;
@@ -18,7 +17,6 @@ public class TaxonomyValidator {
     public static final Logger logger = LoggerFactory.getLogger(TaxonomyValidator.class);
 
     private final String FAILURE_MESSAGE = "Invalid taxonomy: ";
-    private final String SERVICE_UNAVAILABLE = "Service unavailable";
 
     @Autowired
     public TaxonomyService taxonomyService;
@@ -51,14 +49,6 @@ public class TaxonomyValidator {
             return generateSingleValidationResult(
                     sample,
                     FAILURE_MESSAGE + "Taxonomy not found.",
-                    ValidationStatus.Error
-            );
-
-        } catch (ResourceAccessException e) {
-            logger.error(SERVICE_UNAVAILABLE, e);
-            return generateSingleValidationResult(
-                    sample,
-                    FAILURE_MESSAGE + "Service not available",
                     ValidationStatus.Error
             );
         }
