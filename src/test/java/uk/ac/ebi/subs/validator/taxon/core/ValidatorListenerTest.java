@@ -2,7 +2,6 @@ package uk.ac.ebi.subs.validator.taxon.core;
 
 import org.junit.Test;
 import org.springframework.amqp.rabbit.core.RabbitMessagingTemplate;
-import org.springframework.messaging.converter.MessageConverter;
 import uk.ac.ebi.subs.validator.data.SingleValidationResult;
 import uk.ac.ebi.subs.validator.data.ValidationAuthor;
 import uk.ac.ebi.subs.validator.data.ValidationStatus;

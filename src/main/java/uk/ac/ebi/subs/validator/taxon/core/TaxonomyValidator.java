@@ -32,7 +32,7 @@ public class TaxonomyValidator {
             Taxonomy taxonomy = taxonomyService.getTaxonById(sample.getTaxonId().toString());
 
             if (taxonomy == null) {
-                logger.error("Ivalid Taxonomy ID: {}.", sample.getTaxonId());
+                logger.error("Invalid Taxonomy ID: {}.", sample.getTaxonId());
                 return generateSingleValidationResult(sample, FAILURE_MESSAGE + "Invalid taxonomy ID: {}." + sample.getTaxonId(), ValidationStatus.Error);
             }
 
