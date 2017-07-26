@@ -35,7 +35,6 @@ public class TaxonomyValidatorTest {
 
         when(taxonomyService.getTaxonById(taxonomy.getTaxId())).thenReturn(taxonomy);
         when(taxonomyService.getTaxonById(String.valueOf(96000006L))).thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
-        when(taxonomyService.getTaxonByTaxonomicName("human")).thenReturn(taxonomy);
         when(taxonomyService.getTaxonById(String.valueOf(10090L))).thenThrow(new ResourceAccessException("ResourceAccessException"));
     }
 
