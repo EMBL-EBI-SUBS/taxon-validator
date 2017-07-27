@@ -1,0 +1,7 @@
+spring:
+  cache:
+    cache-names: taxonomies
+    caffeine:
+      spec:
+        - expireAfterWrite=24h
+        - maximumSize=10000
