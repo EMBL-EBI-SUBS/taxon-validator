@@ -1,10 +1,12 @@
 package uk.ac.ebi.subs.validator.taxon.core;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.amqp.rabbit.core.RabbitMessagingTemplate;
 import uk.ac.ebi.subs.validator.data.SingleValidationResult;
 import uk.ac.ebi.subs.validator.data.ValidationAuthor;
 import uk.ac.ebi.subs.validator.data.ValidationStatus;
+import uk.ac.ebi.subs.validator.taxon.core.config.RabbitMQDependentTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ import static org.mockito.Mockito.mock;
 /**
  * Created by karoly on 07/07/2017.
  */
+@Category(RabbitMQDependentTest.class)
 public class ValidatorListenerTest {
 
     @Test
