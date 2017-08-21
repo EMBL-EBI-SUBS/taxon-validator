@@ -1,0 +1,12 @@
+FROM anapsix/alpine-java:8_jdk
+
+WORKDIR /opt
+
+ENV LC_ALL=C
+ENV RABBIT_HOST=localhost
+ENV RABBIT_PORT=5672
+
+# copy in the gradlew, gradle credentials and src folder
+ADD build/libs/*.jar .
+
+CMD java -jar *.jar --spring.rabbitmq.host=$RABBIT_HOST --spring.rabbitmq.port=$RABBIT_PORT 
