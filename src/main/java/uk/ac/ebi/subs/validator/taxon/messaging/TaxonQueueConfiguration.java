@@ -35,12 +35,12 @@ public class TaxonQueueConfiguration {
      * using the taxonomy routing key for validation events of samples.
      *
      * @param taxonSampleValidationQueue to validate samples taxonomy entries.
-     * @param validationExchange {@link TopicExchange} for validation
+     * @param submissionExchange {@link TopicExchange} for validation
      * @return a {@link Binding}  between the validation exchange and Taxonomy sample validation queue
      * using the routing key of created samples.
      */
     @Bean
-    public Binding taxonSampleValidationBinding(Queue taxonSampleValidationQueue, TopicExchange validationExchange) {
-        return BindingBuilder.bind(taxonSampleValidationQueue).to(validationExchange).with(RoutingKeys.EVENT_TAXON_SAMPLE_VALIDATION);
+    public Binding taxonSampleValidationBinding(Queue taxonSampleValidationQueue, TopicExchange submissionExchange) {
+        return BindingBuilder.bind(taxonSampleValidationQueue).to(submissionExchange).with(RoutingKeys.EVENT_TAXON_SAMPLE_VALIDATION);
     }
 }
