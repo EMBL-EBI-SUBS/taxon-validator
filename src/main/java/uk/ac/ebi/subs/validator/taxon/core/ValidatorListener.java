@@ -7,7 +7,11 @@ import org.springframework.amqp.rabbit.core.RabbitMessagingTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.ac.ebi.subs.data.submittable.Sample;
-import uk.ac.ebi.subs.validator.data.*;
+import uk.ac.ebi.subs.validator.data.SingleValidationResult;
+import uk.ac.ebi.subs.validator.data.SingleValidationResultsEnvelope;
+import uk.ac.ebi.subs.validator.data.ValidationMessageEnvelope;
+import uk.ac.ebi.subs.validator.data.structures.SingleValidationResultStatus;
+import uk.ac.ebi.subs.validator.data.structures.ValidationAuthor;
 import uk.ac.ebi.subs.validator.messaging.Exchanges;
 import uk.ac.ebi.subs.validator.messaging.Queues;
 import uk.ac.ebi.subs.validator.messaging.RoutingKeys;
@@ -35,8 +39,6 @@ public class ValidatorListener {
 
         Sample sample = envelope.getEntityToValidate();
         SingleValidationResult singleValidationResult = validator.validateTaxonomy(sample);
-
-        singleValidationResult.setValidationResultUUID(envelope.getValidationResultUUID());
 
         List<SingleValidationResult> validationResults = Collections.singletonList(singleValidationResult);
 
@@ -66,7 +68,7 @@ public class ValidatorListener {
 
     boolean hasValidationError(List<SingleValidationResult> validationResults) {
         SingleValidationResult errorValidationResult = validationResults.stream().filter(
-                validationResult -> validationResult.getValidationStatus() == ValidationStatus.Error)
+                validationResult -> validationResult.getValidationStatus() == SingleValidationResultStatus.Error)
                 .findAny()
                 .orElse(null);
 

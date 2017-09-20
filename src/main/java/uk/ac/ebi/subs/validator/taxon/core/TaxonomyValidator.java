@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import uk.ac.ebi.subs.data.submittable.Sample;
 import uk.ac.ebi.subs.validator.data.SingleValidationResult;
-import uk.ac.ebi.subs.validator.data.ValidationAuthor;
-import uk.ac.ebi.subs.validator.data.ValidationStatus;
-
-import java.util.UUID;
+import uk.ac.ebi.subs.validator.data.structures.SingleValidationResultStatus;
+import uk.ac.ebi.subs.validator.data.structures.ValidationAuthor;
 
 @Service
 public class TaxonomyValidator {
@@ -25,7 +23,7 @@ public class TaxonomyValidator {
 
         if (sample.getTaxonId() == null) {
             logger.error("Taxonomy ID can't be null.");
-            return generateSingleValidationResult(sample, FAILURE_MESSAGE + "No taxonomy ID provided.", ValidationStatus.Error);
+            return generateSingleValidationResult(sample, FAILURE_MESSAGE + "No taxonomy ID provided.", SingleValidationResultStatus.Error);
         }
 
         try {
@@ -33,31 +31,29 @@ public class TaxonomyValidator {
 
             if (taxonomy == null) {
                 logger.error("Invalid Taxonomy ID: {}.", sample.getTaxonId());
-                return generateSingleValidationResult(sample, FAILURE_MESSAGE + "Invalid taxonomy ID: {}." + sample.getTaxonId(), ValidationStatus.Error);
+                return generateSingleValidationResult(sample, FAILURE_MESSAGE + "Invalid taxonomy ID: {}." + sample.getTaxonId(), SingleValidationResultStatus.Error);
             }
 
             if (!taxonomy.isSubmittable()) {
                 logger.debug(FAILURE_MESSAGE + "Taxonomy not submittable.");
-                return generateSingleValidationResult(sample, FAILURE_MESSAGE + "Taxonomy not submittable.", ValidationStatus.Error);
+                return generateSingleValidationResult(sample, FAILURE_MESSAGE + "Taxonomy not submittable.", SingleValidationResultStatus.Error);
             }
 
             logger.debug("Valid taxonomy: " + taxonomy);
-            return generateSingleValidationResult(sample, null, ValidationStatus.Pass);
+            return generateSingleValidationResult(sample, null, SingleValidationResultStatus.Pass);
 
         } catch (HttpClientErrorException e) {
             logger.debug(FAILURE_MESSAGE + " id [" + sample.getId() + "]", e);
             return generateSingleValidationResult(
                     sample,
                     FAILURE_MESSAGE + "Taxonomy not found.",
-                    ValidationStatus.Error
+                    SingleValidationResultStatus.Error
             );
         }
-
     }
 
-    private SingleValidationResult generateSingleValidationResult(Sample sample, String message, ValidationStatus status) {
+    private SingleValidationResult generateSingleValidationResult(Sample sample, String message, SingleValidationResultStatus status) {
         SingleValidationResult result = new SingleValidationResult();
-        result.setUuid(UUID.randomUUID().toString());
         result.setEntityUuid(sample.getId());
         result.setMessage(message);
         result.setValidationAuthor(ValidationAuthor.Taxonomy);

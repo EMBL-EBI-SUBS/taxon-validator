@@ -7,7 +7,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import uk.ac.ebi.subs.data.submittable.Sample;
 import uk.ac.ebi.subs.validator.data.SingleValidationResult;
-import uk.ac.ebi.subs.validator.data.ValidationStatus;
+import uk.ac.ebi.subs.validator.data.structures.SingleValidationResultStatus;
 
 import java.util.UUID;
 
@@ -43,7 +43,7 @@ public class TaxonomyValidatorTest {
         sample.setTaxonId(Long.valueOf(taxonomy.getTaxId()));
 
         SingleValidationResult result = taxonomyValidator.validateTaxonomy(sample);
-        Assert.assertTrue(result.getValidationStatus().equals(ValidationStatus.Pass));
+        Assert.assertTrue(result.getValidationStatus().equals(SingleValidationResultStatus.Pass));
     }
 
     @Test
