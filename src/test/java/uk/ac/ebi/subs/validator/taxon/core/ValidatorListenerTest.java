@@ -4,8 +4,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.amqp.rabbit.core.RabbitMessagingTemplate;
 import uk.ac.ebi.subs.validator.data.SingleValidationResult;
-import uk.ac.ebi.subs.validator.data.ValidationAuthor;
-import uk.ac.ebi.subs.validator.data.ValidationStatus;
+import uk.ac.ebi.subs.validator.data.structures.SingleValidationResultStatus;
+import uk.ac.ebi.subs.validator.data.structures.ValidationAuthor;
 import uk.ac.ebi.subs.validator.taxon.core.config.RabbitMQDependentTest;
 
 import java.util.ArrayList;
@@ -26,8 +26,8 @@ public class ValidatorListenerTest {
     @Test
     public void testValidationError() {
         List<SingleValidationResult> validationResults = new ArrayList<>();
-        validationResults.add(generateSingleValidationResult(ValidationStatus.Pass));
-        validationResults.add(generateSingleValidationResult(ValidationStatus.Error));
+        validationResults.add(generateSingleValidationResult(SingleValidationResultStatus.Pass));
+        validationResults.add(generateSingleValidationResult(SingleValidationResultStatus.Error));
 
         ValidatorListener listener =
                 new ValidatorListener(mock(RabbitMessagingTemplate.class));
@@ -35,7 +35,7 @@ public class ValidatorListenerTest {
         assertThat(listener.hasValidationError(validationResults), is(equalTo(true)));
     }
 
-    private SingleValidationResult generateSingleValidationResult(ValidationStatus validationStatus) {
+    private SingleValidationResult generateSingleValidationResult(SingleValidationResultStatus validationStatus) {
         SingleValidationResult singleValidationResult =
                 new SingleValidationResult(ValidationAuthor.Taxonomy, UUID.randomUUID().toString());
         singleValidationResult.setMessage("Test message");
