@@ -5,3 +5,12 @@ spring:
       spec:
         expireAfterWrite: 24h
         maximumSize: 10000
+
+  rabbitmq:
+    listener:
+      retry:
+        enabled: true
+        initial-interval: 5000
+        max-attempts: 3
+        multiplier: 2
+        max-interval: 35000
