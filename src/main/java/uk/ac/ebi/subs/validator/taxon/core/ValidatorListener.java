@@ -27,12 +27,12 @@ public class ValidatorListener {
 
     private RabbitMessagingTemplate rabbitMessagingTemplate;
 
-    @Autowired
+
     private TaxonomyValidator validator;
 
-    @Autowired
-    public ValidatorListener(RabbitMessagingTemplate rabbitMessagingTemplate) {
+    public ValidatorListener(RabbitMessagingTemplate rabbitMessagingTemplate, TaxonomyValidator validator) {
         this.rabbitMessagingTemplate = rabbitMessagingTemplate;
+        this.validator = validator;
     }
 
     @RabbitListener(queues = TAXON_SAMPLE_VALIDATION)
