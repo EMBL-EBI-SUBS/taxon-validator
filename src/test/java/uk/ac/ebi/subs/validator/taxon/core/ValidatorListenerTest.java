@@ -30,7 +30,7 @@ public class ValidatorListenerTest {
         validationResults.add(generateSingleValidationResult(SingleValidationResultStatus.Error));
 
         ValidatorListener listener =
-                new ValidatorListener(mock(RabbitMessagingTemplate.class));
+                new ValidatorListener(mock(RabbitMessagingTemplate.class),mock(TaxonomyValidator.class));
 
         assertThat(listener.hasValidationError(validationResults), is(equalTo(true)));
     }

@@ -27,12 +27,25 @@ public class ValidatorListener {
 
     private RabbitMessagingTemplate rabbitMessagingTemplate;
 
-    @Autowired
+
     private TaxonomyValidator validator;
 
-    @Autowired
-    public ValidatorListener(RabbitMessagingTemplate rabbitMessagingTemplate) {
+    public ValidatorListener(RabbitMessagingTemplate rabbitMessagingTemplate, TaxonomyValidator validator) {
         this.rabbitMessagingTemplate = rabbitMessagingTemplate;
+        this.validator = validator;
+        this.hackyTest();
+    }
+
+    private void hackyTest(){
+
+        int i = 10;
+        while(i-- > 0){
+            logger.info("look up");
+            Taxonomy t = validator.taxonomyService.getTaxonById("9606");
+            logger.info("looked up: {}",t);
+        }
+
+
     }
 
     @RabbitListener(queues = TAXON_SAMPLE_VALIDATION)
