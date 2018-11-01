@@ -2,6 +2,9 @@ package uk.ac.ebi.subs.validator.taxon.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * Value object for representing a taxonomy record from ENA's database.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Taxonomy {
 
