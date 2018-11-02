@@ -10,6 +10,9 @@ import uk.ac.ebi.subs.validator.data.SingleValidationResult;
 import uk.ac.ebi.subs.validator.data.structures.SingleValidationResultStatus;
 import uk.ac.ebi.subs.validator.data.structures.ValidationAuthor;
 
+/**
+ * Validates the given sample's {@link Taxonomy} data retrieved from ENA's database.
+ */
 @Service
 public class TaxonomyValidator {
     public static final Logger logger = LoggerFactory.getLogger(TaxonomyValidator.class);
