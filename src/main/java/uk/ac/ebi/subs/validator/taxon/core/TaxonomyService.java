@@ -9,6 +9,11 @@ import org.springframework.web.client.RestTemplate;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * This is a Spring @Service component for retrieve a {@link Taxonomy} data object from ENA's database.
+ * It tries to store the retrieved {@link Taxonomy} data in a local cache.
+ * If the taxonomy data is in the cache, then it won't query ENA's database.
+ */
 @Service
 public class TaxonomyService {
     private static final Logger logger = LoggerFactory.getLogger(TaxonomyService.class);
@@ -50,6 +55,9 @@ public class TaxonomyService {
         return taxonomy;
     }
 
+    /**
+     * Local cache to store {@link Taxonomy} data.
+     */
     private static class LRUCache extends LinkedHashMap<String, Taxonomy> {
         private int cacheSize;
 

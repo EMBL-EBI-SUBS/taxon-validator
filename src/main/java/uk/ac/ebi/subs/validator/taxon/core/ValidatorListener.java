@@ -21,6 +21,9 @@ import static uk.ac.ebi.subs.validator.taxon.messaging.TaxonValidatorQueues.TAXO
 import static uk.ac.ebi.subs.validator.taxon.messaging.TaxonValidatorRoutingKeys.EVENT_VALIDATION_ERROR;
 import static uk.ac.ebi.subs.validator.taxon.messaging.TaxonValidatorRoutingKeys.EVENT_VALIDATION_SUCCESS;
 
+/**
+ * Listener to execute {@link Taxonomy} data validation for a given sample.
+ */
 @Service
 public class ValidatorListener {
     private static Logger logger = LoggerFactory.getLogger(ValidatorListener.class);
