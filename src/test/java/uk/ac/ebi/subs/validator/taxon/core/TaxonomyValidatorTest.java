@@ -41,13 +41,14 @@ public class TaxonomyValidatorTest {
     @Test
     public void validateTaxonTest() {
         sample.setTaxonId(Long.valueOf(taxonomy.getTaxId()));
+        sample.setTaxon(taxonomy.getScientificName());
 
         SingleValidationResult result = taxonomyValidator.validateTaxonomy(sample);
         Assert.assertTrue(result.getValidationStatus().equals(SingleValidationResultStatus.Pass));
     }
 
     @Test
-    public void validateBadTaxonTest() {
+    public void validateBadTaxonIdTest() {
         sample.setTaxonId(96000006L);
 
         SingleValidationResult result = taxonomyValidator.validateTaxonomy(sample);
@@ -55,7 +56,25 @@ public class TaxonomyValidatorTest {
     }
 
     @Test
-    public void validateNullTaxonTest() {
+    public void validateNullTaxonIdTest() {
+        SingleValidationResult result = taxonomyValidator.validateTaxonomy(sample);
+        Assert.assertTrue(result.getMessage().startsWith(FAILURE_MESSAGE));
+    }
+
+    @Test
+    public void validateNullTaxonText(){
+        sample.setTaxonId(Long.valueOf(taxonomy.getTaxId()));
+        sample.setTaxon(null);
+
+        SingleValidationResult result = taxonomyValidator.validateTaxonomy(sample);
+        Assert.assertTrue(result.getMessage().startsWith(FAILURE_MESSAGE));
+    }
+
+    @Test
+    public void validateInconsistentTaxonText(){
+        sample.setTaxonId(Long.valueOf(taxonomy.getTaxId()));
+        sample.setTaxon("Gallus gallus");
+
         SingleValidationResult result = taxonomyValidator.validateTaxonomy(sample);
         Assert.assertTrue(result.getMessage().startsWith(FAILURE_MESSAGE));
     }
