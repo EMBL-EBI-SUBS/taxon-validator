@@ -1,5 +1,5 @@
 group 'uk.ac.ebi.subs'
-version '1.2.3-SNAPSHOT'
+version '1.2.4-SNAPSHOT'
 
 buildscript {
     repositories {
@@ -25,14 +25,15 @@ ext.gradle_env = hasProperty('env') ? env : 'dev'
 bootRepackage {
     mainClass = "uk.ac.ebi.subs.validator.taxon.TaxonomyValidatorApplication"
 }
+
 springBoot {
     executable = true
+    buildInfo()
 }
 
 repositories {
     mavenCentral()
     jcenter()
-
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
@@ -45,6 +46,8 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework:spring-web")
     compile("com.fasterxml.jackson.core:jackson-databind")
+
+    compile 'de.codecentric:spring-boot-admin-starter-client:1.5.7'
 
     compile("de.siegmar:logback-gelf:1.1.0")
 
