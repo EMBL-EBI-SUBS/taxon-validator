@@ -1,33 +1,35 @@
-group 'uk.ac.ebi.subs'
-version '1.2.4-SNAPSHOT'
-
 buildscript {
     repositories {
         mavenCentral()
         jcenter()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.10.RELEASE")
-        classpath 'org.hidetake:gradle-ssh-plugin:1.1.3'
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.2.1.RELEASE")
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'maven'
-apply plugin: 'org.hidetake.ssh'
+plugins {
+    id 'java-library'
+    id 'org.springframework.boot' version '2.2.1.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'maven-publish'
+    id 'org.hidetake.ssh' version "2.10.1"
+}
 
-sourceCompatibility = 1.8
+group 'uk.ac.ebi.subs'
+version '1.3.0'
 
-ext.gradle_env = hasProperty('env') ? env : 'dev'
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
 
-bootRepackage {
-    mainClass = "uk.ac.ebi.subs.validator.taxon.TaxonomyValidatorApplication"
+bootJar {
+    mainClassName = "uk.ac.ebi.subs.validator.taxon.TaxonomyValidatorApplication"
+    launchScript()
 }
 
 springBoot {
-    executable = true
     buildInfo()
 }
 
@@ -38,65 +40,22 @@ repositories {
 }
 
 dependencies {
-    compile ("uk.ac.ebi.subs:validator-common:2.8.0-SNAPSHOT") {
+    implementation(group: "uk.ac.ebi.subs", name:"validator-common", version: "3.11.4-SNAPSHOT") {
         exclude group: 'org.springframework.boot', module :'spring-boot-starter-data-mongodb'
     }
-    compile("uk.ac.ebi.subs:subs-messaging:0.4.0-SNAPSHOT")
+    implementation("uk.ac.ebi.subs:subs-messaging:0.5.0-SNAPSHOT")
  
-    compile("org.springframework.boot:spring-boot-starter")
-    compile("org.springframework:spring-web")
-    compile("com.fasterxml.jackson.core:jackson-databind")
+    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework:spring-web")
+    implementation 'org.springframework.boot:spring-boot-starter-amqp:2.2.1.RELEASE'
+    implementation("com.fasterxml.jackson.core:jackson-databind")
 
-    compile 'de.codecentric:spring-boot-admin-starter-client:1.5.7'
+    implementation 'de.codecentric:spring-boot-admin-starter-client:2.1.6'
 
-    compile("de.siegmar:logback-gelf:1.1.0")
+    implementation("de.siegmar:logback-gelf:1.1.0")
 
-    testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile("org.mockito:mockito-core:2.+")
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
-                if (project.hasProperty('ossrhUsername') && project.hasProperty('ossrhPassword')) {
-                    authentication(userName: ossrhUsername, password: ossrhPassword)
-                }
-            }
-
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
-                if (project.hasProperty('ossrhUsername') && project.hasProperty('ossrhPassword')) {
-                    authentication(userName: ossrhUsername, password: ossrhPassword)
-                }
-
-            }
-
-            pom.project {
-                packaging 'jar'
-                url 'https://github.com/EMBL-EBI-SUBS/taxon-validator'
-
-                scm {
-                    url 'https://github.com/EMBL-EBI-SUBS/taxon-validator.git'
-                }
-
-                licenses {
-                    license {
-                        name 'The Apache License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'subs-internal'
-                        name 'EMBL-EBI-SUBS'
-                        email 'subs-internal@ebi.ac.uk'
-                    }
-                }
-            }
-        }
-    }
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.mockito:mockito-core:2.+")
 }
 
 ssh.settings {
@@ -115,7 +74,6 @@ task printJarName {
     doLast {
         println "$jar.archivePath.name"
     }
-
 }
 
 task printJarFullPath {
@@ -142,6 +100,8 @@ def devDeployHostName = hasProperty(project.name + "DevDeployTarget") ? getPrope
 def testDeployHostName = hasProperty(project.name + "TestDeployTarget") ? getProperty(project.name + "TestDeployTarget") : 'localhost'
 def prodDeployHostName = hasProperty(project.name + "ProdDeployTarget") ? getProperty(project.name + "ProdDeployTarget") : 'localhost'
 
+ext.gradle_env = hasProperty('env') ? env : 'dev'
+
 remotes {
     submission_dev {
         role('dev')
@@ -157,7 +117,7 @@ remotes {
     }
 }
 
-task deployJar(type: SshTask, dependsOn: 'assemble') {
+task deployJar(dependsOn: 'assemble') {
     doLast {
         def uploadJarFileName = project.name + "-"  + project.version + "." + System.currentTimeMillis() + ".jar"
         File jarDeployDir = new File("/data/$gradle_env/$project.name/jar",uploadJarFileName)
