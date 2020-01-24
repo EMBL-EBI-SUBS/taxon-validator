@@ -12,7 +12,7 @@ plugins {
     id 'java-library'
     id 'org.springframework.boot' version '1.5.21.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-    id 'org.hidetake.ssh' version "2.10.1"
+    id 'org.hidetake.ssh' version "1.1.3"
     id 'application'
 }
 
@@ -38,19 +38,19 @@ repositories {
 }
 
 dependencies {
-    implementation(group: "uk.ac.ebi.subs", name:"validator-common", version: "3.11.4-SNAPSHOT") {
+    compile(group: "uk.ac.ebi.subs", name:"validator-common", version: "3.11.4-SNAPSHOT") {
         exclude group: 'org.springframework.boot', module :'spring-boot-starter-data-mongodb'
     }
-    implementation("uk.ac.ebi.subs:subs-messaging:0.5.0-SNAPSHOT")
+    compile("uk.ac.ebi.subs:subs-messaging:0.5.0-SNAPSHOT")
  
-    implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.springframework:spring-web")
-    implementation 'org.springframework.boot:spring-boot-starter-amqp:2.2.1.RELEASE'
-    implementation("com.fasterxml.jackson.core:jackson-databind")
+    compile("org.springframework.boot:spring-boot-starter")
+    compile("org.springframework:spring-web")
+    compile 'org.springframework.boot:spring-boot-starter-amqp:2.2.1.RELEASE'
+    compile("com.fasterxml.jackson.core:jackson-databind")
 
-    implementation 'de.codecentric:spring-boot-admin-starter-client:2.1.6'
+    compile 'de.codecentric:spring-boot-admin-starter-client:2.1.6'
 
-    implementation("de.siegmar:logback-gelf:1.1.0")
+    compile("de.siegmar:logback-gelf:1.1.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mockito:mockito-core:2.+")
@@ -115,7 +115,7 @@ remotes {
     }
 }
 
-task deployJar(dependsOn: 'assemble') {
+task deployJar(type: SshTask, dependsOn: 'assemble') {
     doLast {
         def uploadJarFileName = project.name + "-"  + project.version + "." + System.currentTimeMillis() + ".jar"
         File jarDeployDir = new File("/data/$gradle_env/$project.name/jar",uploadJarFileName)
