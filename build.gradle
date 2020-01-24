@@ -38,14 +38,14 @@ repositories {
 }
 
 dependencies {
-    compile(group: "uk.ac.ebi.subs", name:"validator-common", version: "3.11.4-SNAPSHOT") {
+    compile(group: "uk.ac.ebi.subs", name:"validator-common", version: "3.14.0-SNAPSHOT") {
         exclude group: 'org.springframework.boot', module :'spring-boot-starter-data-mongodb'
     }
-    compile("uk.ac.ebi.subs:subs-messaging:0.5.0-SNAPSHOT")
+    compile("uk.ac.ebi.subs:subs-messaging:0.6.0-SNAPSHOT")
  
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework:spring-web")
-    compile 'org.springframework.boot:spring-boot-starter-amqp:2.2.1.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-amqp'
     compile("com.fasterxml.jackson.core:jackson-databind")
 
     compile 'de.codecentric:spring-boot-admin-starter-client:1.5.7'
