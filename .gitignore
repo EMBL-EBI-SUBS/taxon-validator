@@ -3,3 +3,5 @@
 build/
 out/
 *.iml
+
+/LOG_HOME_IS_UNDEFINED/

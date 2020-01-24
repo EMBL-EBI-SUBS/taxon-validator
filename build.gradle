@@ -4,33 +4,31 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.2.1.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.21.RELEASE")
     }
 }
 
 plugins {
     id 'java-library'
-    id 'org.springframework.boot' version '2.2.1.RELEASE'
+    id 'org.springframework.boot' version '1.5.21.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-    id 'maven-publish'
     id 'org.hidetake.ssh' version "2.10.1"
+    id 'application'
 }
 
 group 'uk.ac.ebi.subs'
-version '1.3.0'
+version '1.4.0'
+
+mainClassName = "uk.ac.ebi.subs.validator.taxon.TaxonomyValidatorApplication"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-bootJar {
-    mainClassName = "uk.ac.ebi.subs.validator.taxon.TaxonomyValidatorApplication"
-    launchScript()
-}
-
 springBoot {
     buildInfo()
+    executable = true
 }
 
 repositories {
